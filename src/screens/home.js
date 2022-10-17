@@ -1,6 +1,7 @@
 import { Entypo } from '@expo/vector-icons';
 import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, View } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import PlanetHeader from "../components/planet-header";
 import Text from "../components/text/text";
 import { PLANET_LISTS } from "../data/planet-list";
@@ -9,9 +10,9 @@ import { spacing } from "../theme/spacing";
 
 
 
-const Home = () => {
+const Home = ({navigation}) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <PlanetHeader />
 
       <FlatList
@@ -20,18 +21,20 @@ const Home = () => {
         keyExtractor={(item, index) => item.name}
         renderItem={({item, index}) => {
           return (
-            <View style={styles.item}>
+            <Pressable onPress={() => {
+              navigation.navigate('Details', {planet: item})
+            }} style={styles.item}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <View style={[styles.circle, {backgroundColor: item.color}]} />
                     <Text preset="h4" style={styles.itemName}>{item.name}</Text>
                 </View>
                 <Entypo name="chevron-small-right" size={18} color="white" />
-            </View>
+            </Pressable>
           );
         }}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
