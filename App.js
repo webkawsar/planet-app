@@ -1,10 +1,12 @@
+import { DarkTheme, NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import Text from './src/components/text/text';
+import Home from './src/screens/home';
 import { colors } from './src/theme/colors';
-import { spacing } from './src/theme/spacing';
-import { typography } from './src/theme/typography';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -17,13 +19,16 @@ export default function App() {
     return <Text>Font is loading...</Text>
   }
 
-
+  
 
   return (
-    <View style={styles.container}>
-      <Text style={{fontFamily: typography.bold, fontSize: spacing[5]}}>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.droidSafeArea}>
+      <NavigationContainer theme={DarkTheme}>
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Screen name="Home" component={Home} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaView>
   );
 }
 
@@ -33,5 +38,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.darkOrange,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  droidSafeArea: {
+    flex: 1,
+    paddingTop: Platform.OS === 'android' ?  StatusBar.currentHeight : 0,
   },
 });
